@@ -1,137 +1,158 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Меню Клуба</title>
-<style>
-    body {
-        font-family: sans-serif;
-        background: #111;
-        color: #eee;
-        text-align: center;
-        padding: 10px;
-    }
-    button {
-        margin: 5px;
-        padding: 10px 20px;
-        font-size: 16px;
-        background-color: #333;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    button:hover {
-        background-color: #555;
-    }
-    #orders {
-        margin-top: 20px;
-        text-align: left;
-        max-width: 400px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    ul {
-        padding-left: 20px;
-    }
-</style>
+    <meta charset="UTF-8">
+    <title>Меню Клуба</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #111;
+            color: #eee;
+            padding: 20px;
+            margin: 0;
+        }
+        h1 {
+            text-align: center;
+        }
+        .category {
+            margin-bottom: 20px;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: left;
+        }
+        button:hover {
+            background-color: #555;
+        }
+        ul {
+            list-style: none;
+            padding-left: 20px;
+            display: none;
+        }
+        li {
+            margin: 5px 0;
+        }
+    </style>
 </head>
 <body>
-<h1>Меню Клуба</h1>
+    <h1>Меню Клуба</h1>
 
-<div id="menu"></div>
+    <div class="category">
+        <button onclick="toggleMenu('salads')">Салаты</button>
+        <ul id="salads">
+            <li>Салат с семгой и вялеными томатами</li>
+            <li>Цезарь с курицей</li>
+            <li>Салат с говяжьей вырезкой и ореховым соусом</li>
+            <li>Салат с баклажанами, томатами и фетой</li>
+            <li>Фермерский салат с говядиной в азиатском стиле</li>
+            <li>Сочный греческий салат с брынзой</li>
+            <li>Цезарь с креветками и лососем</li>
+            <li>Салат из говядины со стручковой фасолью</li>
+            <li>Салат с картофелем пай и говядиной</li>
+            <li>Салат с копченой курицей и виноградом</li>
+        </ul>
+    </div>
 
-<div id="orders">
-    <h2>Текущие заказы:</h2>
-    <ul id="orderList"></ul>
-    <button onclick="clearOrders()">Очистить заказы</button>
-</div>
+    <div class="category">
+        <button onclick="toggleMenu('soups')">Супы</button>
+        <ul id="soups">
+            <li>Рамен с говядиной</li>
+            <li>Чечевичный суп</li>
+            <li>Сырно-грибной суп</li>
+            <li>Царская уха</li>
+        </ul>
+    </div>
 
-<script>
-const menuItems = [
-    "САЛАТ С СЕМГОЙ И ВЯЛЕНЫМИ ТОМАТАМИ",
-    "ЦЕЗАРЬ С КУРИЦЕЙ",
-    "САЛАТ С ГОВЯЖЬЕЙ ВЫРЕЗКОЙ, СВЕЖИМИ ОВОЩАМИ И ОРЕХОВЫМ СОУСОМ",
-    "САЛАТ С БАКЛАЖАНАМИ, СПЕЛЫМИ ТОМАТАМИ И СЫРОМ ФЕТА",
-    "ФЕРМЕРСКИЙ САЛАТ С ГОВЯДИНОЙ В АЗИАТСКОМ СТИЛЕ",
-    "СОЧНЫЙ ГРЕЧЕСКИЙ САЛАТ С БРЫНЗОЙ",
-    "ЦЕЗАРЬ С КРЕВЕТКАМИ И ЛОСОСЕМ",
-    "САЛАТ ИЗ ГОВЯДИНЫ СО СТРУЧКОВОЙ ФАСОЛЬЮ",
-    "САЛАТ С СОЧНОЙ ГОВЯДИНОЙ И КАРТОФЕЛЕМ ПАЙ",
-    "САЛАТ С КОПЧЕННОЙ КУРИЦЕЙ И ВИНОГРАДОМ",
-    "ХОЛОДНЫЕ ЗАКУСКИ",
-    "РЫБНОЕ АССОРТИ",
-    "КАРПАЧЧО ИЗ СЕМГИ С ГРЕНКАМИ",
-    "СЫРНАЯ ТАРЕЛКА (моцарелла, твердый сыр, пармезан, дор блю, виноград)",
-    "МЯСНОЕ АССОРТИ",
-    "ТАРЕЛКА С СОЛЕНЬЯМИ",
-    "АССОРТИ СВЕЖИХ ОВОЩЕЙ",
-    "СКУМБРИЯ С ЗАПЕЧЕННЫМ КАРТОФЕЛЕМ",
-    "ЯЗЫК НА ГРИЛЕ с кисло-сладким соусом и горчицей",
-    "ОЛИВКИ И МАСЛИНЫ",
-    "ЛИМОН",
-    "ГОРЯЧИЕ ЗАКУСКИ",
-    "ПИВНОЙ СЕТ №1 (луковые кольца, наггетсы, сырные палочки, фирменные чипсы, соус тар-тар)",
-    "ПИВНОЙ СЕТ №2 (крылышки, колбаски, гренки, сырные палочки, кольца луковые, фирменные чипсы, кальмары в кляре, чечел, соусы: сальса, тар-тар)",
-    "КОЛБАСКИ НА УГЛЯХ (говядина, баранина, курица)",
-    "КОЛБАСКИ ОХОТНИКА К ПИВУ",
-    "КУРИНЫЕ НАГГЕТСЫ",
-    "СЫРНЫЕ ПАЛОЧКИ",
-    "ЧЕСНОЧНЫЕ ГРЕНКИ С СОУСОМ",
-    "ПИЦЦА И ВЫПЕЧКА",
-    "ФИРМЕННАЯ «ГИПСИ» (салями, ветчина, грибы, яйцо, маслины)",
-    "ПЕППЕРОНИ (пепперони, халапенью)",
-    "ЦЕЗАРЬ (куриная грудка, пармезан, черри, руккола, яйцо)",
-    "4 СЫРА (моцарелла, чеддер, пармезан, дор блю)",
-    "МАРГАРИТА (помидоры, сыр)",
-    "ТЕХАС (говядина bbq, халапенью, черри)",
-    "СЫРНАЯ ЛЕПЕШКА",
-    "ХАЧАПУРИ ПО-АДЖАРСКИ",
-    "ХЛЕБНАЯ КОРЗИНА"
-];
+    <div class="category">
+        <button onclick="toggleMenu('sides')">Гарниры</button>
+        <ul id="sides">
+            <li>Брокколи и цветная капуста в кляре</li>
+            <li>Овощи на гриле</li>
+            <li>Картофель фри</li>
+            <li>Картофельные дольки с чесноком</li>
+            <li>Рис припущенный</li>
+            <li>Жареный картофель с грибами</li>
+        </ul>
+    </div>
 
-const menuDiv = document.getElementById('menu');
-const orderList = document.getElementById('orderList');
+    <div class="category">
+        <button onclick="toggleMenu('mains')">Горячие блюда</button>
+        <ul id="mains">
+            <li>Медальоны из говядины с овощами и соусом тар-тар</li>
+            <li>Судак жареный в ореховом соусе</li>
+            <li>Семга с плавленым сыром</li>
+            <li>Курица с картофелем и грибным соусом</li>
+            <li>Грудинка BBQ с картофелем и салатом</li>
+            <li>Стейк семги со сливочным соусом и рисом</li>
+            <li>Говядина под сливочно-сырным соусом и грибами</li>
+            <li>Баранина по-тайски с запечённым картофелем</li>
+            <li>Антрекот из говядины с овощным тар-тар</li>
+            <li>Антрекот из баранины с грибным соусом</li>
+            <li>Филе утки с черносливом и грушей</li>
+            <li>Куриные медальоны с грибами и перцем</li>
+        </ul>
+    </div>
 
-function renderMenu() {
-    menuItems.forEach(item => {
-        const btn = document.createElement('button');
-        btn.textContent = item;
-        btn.onclick = () => addOrder(item);
-        menuDiv.appendChild(btn);
-    });
-}
+    <div class="category">
+        <button onclick="toggleMenu('grill')">Блюда на мангале</button>
+        <ul id="grill">
+            <li>Хан-кебаб из говядины с фри</li>
+            <li>Антрекот из баранины</li>
+            <li>Люля-кебаб из баранины</li>
+            <li>Люля-кебаб с сыром</li>
+            <li>Шашлык из баранины</li>
+            <li>Шашлык из утки</li>
+            <li>Куриные бёдра</li>
+            <li>Куриные крылья</li>
+            <li>Куриное филе</li>
+            <li>Печень в курдюке</li>
+            <li>Шампиньоны на гриле</li>
+        </ul>
+    </div>
 
-function addOrder(item) {
-    const now = new Date().toLocaleTimeString();
-    const orderText = `${item} — ${now}`;
-    const li = document.createElement('li');
-    li.textContent = orderText;
-    orderList.appendChild(li);
+    <div class="category">
+        <button onclick="toggleMenu('company')">Блюда на компанию</button>
+        <ul id="company">
+            <li>Сет "Meat Grill"</li>
+            <li>Ассорти шашлыков</li>
+            <li>Ассорти колбасок собственного приготовления</li>
+            <li>Сет «Light»</li>
+        </ul>
+    </div>
 
-    // Сохраняем заказ в localStorage
-    let orders = JSON.parse(localStorage.getItem('orders') || '[]');
-    orders.push(orderText);
-    localStorage.setItem('orders', JSON.stringify(orders));
-}
+    <div class="category">
+        <button onclick="toggleMenu('sauces')">Соусы</button>
+        <ul id="sauces">
+            <li>Горчичный</li>
+            <li>Грибной</li>
+            <li>Сливочный</li>
+            <li>Тар-тар</li>
+            <li>Сальса</li>
+        </ul>
+    </div>
 
-function loadOrders() {
-    let orders = JSON.parse(localStorage.getItem('orders') || '[]');
-    orders.forEach(orderText => {
-        const li = document.createElement('li');
-        li.textContent = orderText;
-        orderList.appendChild(li);
-    });
-}
+    <div class="category">
+        <button onclick="toggleMenu('desserts')">Десерты</button>
+        <ul id="desserts">
+            <li>Фруктовая тарелка</li>
+            <li>Чизкейк</li>
+            <li>Мороженое</li>
+            <li>Шоколад в ассортименте</li>
+        </ul>
+    </div>
 
-function clearOrders() {
-    localStorage.removeItem('orders');
-    orderList.innerHTML = '';
-}
-
-renderMenu();
-loadOrders();
-</script>
+    <script>
+        function toggleMenu(id) {
+            const ul = document.getElementById(id);
+            ul.style.display = (ul.style.display === 'block') ? 'none' : 'block';
+        }
+    </script>
 </body>
 </html>
